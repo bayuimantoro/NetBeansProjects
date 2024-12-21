@@ -1,4 +1,4 @@
-package com.mycompany.modul6_v2;
+package ireport;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -12,7 +12,7 @@ public class koneksi {
         Id = "root";
         Pass = "";
         Driver = "com.mysql.cj.jdbc.Driver";
-        Url = "jdbc:mysql://localhost:3306/tugas";
+        Url = "jdbc:mysql://localhost:3306/ireport";
         
         try{
             Class.forName(Driver).newInstance();

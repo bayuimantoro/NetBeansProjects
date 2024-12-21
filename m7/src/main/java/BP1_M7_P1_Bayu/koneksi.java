@@ -1,4 +1,4 @@
-package com.mycompany.modul6_v2;
+package BP1_M7_P1_Bayu;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

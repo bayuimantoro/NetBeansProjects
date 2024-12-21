@@ -2,8 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package com.mycompany.modul6_v2;
+package BP1_M7_P1_Bayu;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -15,6 +16,7 @@ public class Form extends javax.swing.JFrame {
  Statement st;
     ResultSet rs;
     koneksi koneksi;
+    
     /**
      * Creates new form BP1_M5_P1_Bayu
      */
@@ -23,26 +25,65 @@ public class Form extends javax.swing.JFrame {
         koneksi = new koneksi();
         load_data();
     }
-    private void load_data(){
-        Object header[]={"NIM", "NAMA", "JENIS KELAMIN", "PRODI", "Alamat"};
+    private void clean_form() {
+                jTextField1.setText("");
+                jTextField2.setText("");
+                jTextField3.setText("");
+                jTextField4.setText("");
+                jTextField5.setText("");
+                jTextArea1.setText("");
+                jRadioButton1.setSelected(false);
+                jRadioButton2.setSelected(false);
+                jComboBox1.setSelectedIndex(0);
+        }
+private void load_data() {
+        Object header[] = { "NIM", "NAMA", "KELAS", "ANGKATAN", "NO_HP", "JK", "PRODI", "ALAMAT " };
         DefaultTableModel data = new DefaultTableModel(null, header);
         jTable1.setModel(data);
-        String sql = "SELECT NIM, NAMA, JK, PRODI,ALAMAT FROM form";
+        String sql = "SELECT NIM, NAMA, KELAS, ANGKATAN, NO_HP, JK, PRODI, ALAMAT FROM form";
 
-        try{
+        try {
             st = koneksi.con.createStatement();
             rs = st.executeQuery(sql);
-            while(rs.next()){
+            while (rs.next()) {
                 String k1 = rs.getString(1);
                 String k2 = rs.getString(2);
                 String k3 = rs.getString(3);
                 String k4 = rs.getString(4);
                 String k5 = rs.getString(5);
-                
-                String k[]={k1,k2,k3,k4,k5};
+
+                String k6 = rs.getString(6);
+                String k7 = rs.getString(7);
+                String k8 = rs.getString(8);
+                String k[] = { k1, k2, k3, k4, k5, k6, k7, k8};
                 data.addRow(k);
             }
-        }catch(Exception e){
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+        } 
+    }    public void input_data() {
+        try {
+            String JK = "";
+            if (jRadioButton1.isSelected()) {
+                JK = jRadioButton1.getText();
+            } else {
+                JK = jRadioButton2.getText();
+            }
+
+            String sql = "INSERT INTO form values('" + jTextField1.getText()
+                    + "','" + jTextField2.getText()
+                    + "','" + jTextField3.getText()
+                    + "','" + jTextField4.getText()
+                    + "','" + jTextField5.getText()
+                    + "','" + JK
+                    + "','" + jComboBox1.getSelectedItem().toString()
+                    + "','" + jTextArea1.getText()
+                    + "')";
+            st.execute(sql);
+            clean_form();
+            load_data();
+            JOptionPane.showMessageDialog(null, "Data Mahasiswa Berhasil Di Input");
+        } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, e);
         }
     }
@@ -80,6 +121,8 @@ public class Form extends javax.swing.JFrame {
         jTextField4 = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
         jTextField5 = new javax.swing.JTextField();
+        jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -113,7 +156,7 @@ public class Form extends javax.swing.JFrame {
             }
         });
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "TI", "SI", "MI", "TS", "DKV" }));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Pilih:", "TI", "SI", "MI", "TS", "DKV" }));
         jComboBox1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBox1ActionPerformed(evt);
@@ -125,6 +168,16 @@ public class Form extends javax.swing.JFrame {
         jScrollPane1.setViewportView(jTextArea1);
 
         jButton1.setText("SIMPAN");
+        jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton1MouseClicked(evt);
+            }
+        });
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -132,7 +185,7 @@ public class Form extends javax.swing.JFrame {
                 {null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "NIM", "Nama", "KELAS", "ANGKATAN", "NO HPl", "JENIS KELAMIN", "PRODI", "ALAMAT"
+                "NIM", "NAMA", "KELAS", "ANGKATAN", "NO_HP", "JK", "PRODI", "ALAMAT"
             }
         ) {
             Class[] types = new Class [] {
@@ -156,6 +209,20 @@ public class Form extends javax.swing.JFrame {
         });
 
         jLabel11.setText("NO HP");
+
+        jButton2.setText("EDIT");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        jButton3.setText("HAPUS");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -192,14 +259,18 @@ public class Form extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jRadioButton2))
                             .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(6, 6, 6)
-                                .addComponent(jButton1))))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel11, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel10, javax.swing.GroupLayout.Alignment.LEADING))
+                    .addComponent(jLabel10, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addGap(91, 91, 91)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton3)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 721, Short.MAX_VALUE)
@@ -257,7 +328,10 @@ public class Form extends javax.swing.JFrame {
                             .addComponent(jLabel8)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton1))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jButton1)
+                            .addComponent(jButton2)
+                            .addComponent(jButton3)))
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 399, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(38, Short.MAX_VALUE))
         );
@@ -280,6 +354,71 @@ public class Form extends javax.swing.JFrame {
     private void jTextField4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField4ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField4ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
+        // TODO add your handling code here:
+        if (jTextField1.getText().isEmpty() || jTextField2.getText().isEmpty() || jTextField3.getText().isEmpty()
+            || jTextField4.getText().isEmpty() || jTextField5.getText().isEmpty() || (!jRadioButton1.isSelected() && !jRadioButton2.isSelected())
+            || jTextArea1.getText().isEmpty() || jComboBox1.getSelectedIndex() == 0) {
+        JOptionPane.showMessageDialog(null, "Data Harus Di Isi !", "Peringatan", JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+        
+        int response = JOptionPane.showConfirmDialog(null, "Apakah Anda yakin ingin menyimpan data?",
+                                "Konfirmasi", JOptionPane.YES_NO_OPTION);
+                if (response == JOptionPane.YES_OPTION) {
+                        input_data();
+            }
+    }//GEN-LAST:event_jButton1MouseClicked
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        try {
+    String JK = "";
+    if (jRadioButton1.isSelected()) {
+        JK = jRadioButton1.getText(); // Misal: L
+    } else {
+        JK = jRadioButton2.getText(); // Misal: P
+    }
+
+    String sql_edit = "UPDATE form SET "
+            + "nim = '" + jTextField1.getText() + "', "
+            + "nama = '" + jTextField2.getText() + "', "
+            + "kelas = '" + jTextField3.getText() + "', "
+            + "angkatan = '" + jTextField4.getText() + "', "
+            + "no_hp = '" + jTextField5.getText() + "', "
+            + "jk = '" + JK + "', "
+            + "prodi = '" + jComboBox1.getSelectedItem().toString() + "', "
+            + "alamat = '" + jTextArea1.getText() + "' "
+            + "WHERE nim = '" + jTextField1.getText() + "'";
+
+    st.executeUpdate(sql_edit);
+    clean_form();
+    load_data();
+    JOptionPane.showMessageDialog(null, "Data Mahasiswa Berhasil Di Update");
+} catch (SQLException e) {
+    JOptionPane.showMessageDialog(null, e.getMessage());
+}
+
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        try {
+            st = koneksi.con.createStatement();
+            String sql_hapus = "DELETE FROM form WHERE NIM = '" + jTextField1.getText() + "'";
+            st.executeUpdate(sql_hapus);
+            clean_form();
+            JOptionPane.showMessageDialog(null, "Data Berhasil Dihapus!");
+        }      
+        catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -310,6 +449,10 @@ public class Form extends javax.swing.JFrame {
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -321,6 +464,8 @@ public class Form extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
